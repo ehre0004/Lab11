@@ -10,21 +10,79 @@
 */
 
 const accordionBtns = document.querySelectorAll(".accordion");
+const accordionPanels = document.querySelectorAll(".accordion-content");
+
+/**
+ * 
+ * @param {Element} button 
+ * @param {string} dir direction. acceptable values 'next', 'previous', 'first', 'last', everything else returns current index
+ * @returns 
+ */
+function getAccordionIndex(button, dir) {
+  for (let i=0; i<accordionBtns.length; i++) {
+    if (accordionBtns.item(i) == button) {
+      // this is our button
+      if (dir == 'next'){
+        return (i+1) % accordionBtns.length;
+      } else if (dir == 'previous') {
+        return (i == 0) ? accordionBtns.length-1 : i-1;
+      } else if (dir == 'first') {
+        return 0;
+      } else if (dir == 'last') {
+        return accordionBtns.length-1;
+      } else {
+        return i;
+      }
+    }
+  }
+}
+
+function accordianOnClick() {
+  this.classList.toggle("is-open");
+    
+  //let content = this.nextElementSibling;
+  let content = accordionPanels.item(getAccordionIndex(this, "current"));
+  console.log(content);
+
+  if (content.style.maxHeight) {
+    //this is if the accordion is open
+    content.style.maxHeight = null; // CLOSE
+    this.setAttribute("aria-expanded", "false");
+  } else {
+    //if the accordion is currently closed
+    content.style.maxHeight = content.scrollHeight + "px"; // OPEN
+    this.setAttribute("aria-expanded", "true");
+  }
+}
 
 accordionBtns.forEach((accordion) => {
   accordion.onclick = function () {
     this.classList.toggle("is-open");
-
-    let content = this.nextElementSibling;
+    
+    //let content = this.nextElementSibling;
+    let content = accordionPanels.item(getAccordionIndex(this, "current"));
     console.log(content);
 
     if (content.style.maxHeight) {
       //this is if the accordion is open
-      content.style.maxHeight = null;
+      content.style.maxHeight = null; // CLOSE
+      this.setAttribute("aria-expanded", "false");
     } else {
       //if the accordion is currently closed
-      content.style.maxHeight = content.scrollHeight + "px";
-      console.log(content.style.maxHeight);
+      content.style.maxHeight = content.scrollHeight + "px"; // OPEN
+      this.setAttribute("aria-expanded", "true");
+    }
+  };
+  accordion.onkeyup = function (event) {
+    console.log("You pressed the key: "+this.keyCode);
+    if (event.keyCode == 40 || event.keyCode == 39) { // down or right keys
+      accordionBtns.item(getAccordionIndex(this, 'next')).focus();
+    } else if (event.keyCode == 37 || event.keyCode == 38) {
+      accordionBtns.item(getAccordionIndex(this, 'previous')).focus(); // up or left keys
+    } else if (event.keyCode == 36) {
+      accordionBtns.item(getAccordionIndex(this, 'first')).focus(); // home key
+    } else if (event.keyCode == 35) {
+      accordionBtns.item(getAccordionIndex(this, 'last')).focus(); // end key
     }
   };
 });
