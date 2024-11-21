@@ -37,26 +37,6 @@ function getAccordionIndex(button, dir) {
   }
 }
 
-function accordianOnClick() {
-  this.classList.toggle("is-open");
-    
-  //let content = this.nextElementSibling;
-  let content = accordionPanels.item(getAccordionIndex(this, "current"));
-  console.log(content);
-
-  if (content.style.maxHeight) {
-    //this is if the accordion is open
-    content.style.maxHeight = null; // CLOSE
-    content.setAttribute("aria-hidden", "true");
-    this.setAttribute("aria-expanded", "false");
-  } else {
-    //if the accordion is currently closed
-    content.style.maxHeight = content.scrollHeight + "px"; // OPEN
-    content.setAttribute("aria-hidden", "false");
-    this.setAttribute("aria-expanded", "true");
-  }
-}
-
 accordionBtns.forEach((accordion) => {
   accordion.onclick = function () {
     this.classList.toggle("is-open");
