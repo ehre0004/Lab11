@@ -47,10 +47,12 @@ function accordianOnClick() {
   if (content.style.maxHeight) {
     //this is if the accordion is open
     content.style.maxHeight = null; // CLOSE
+    content.setAttribute("aria-hidden", "true");
     this.setAttribute("aria-expanded", "false");
   } else {
     //if the accordion is currently closed
     content.style.maxHeight = content.scrollHeight + "px"; // OPEN
+    content.setAttribute("aria-hidden", "false");
     this.setAttribute("aria-expanded", "true");
   }
 }
@@ -66,10 +68,12 @@ accordionBtns.forEach((accordion) => {
     if (content.style.maxHeight) {
       //this is if the accordion is open
       content.style.maxHeight = null; // CLOSE
+      content.setAttribute("aria-hidden", "true");
       this.setAttribute("aria-expanded", "false");
     } else {
       //if the accordion is currently closed
       content.style.maxHeight = content.scrollHeight + "px"; // OPEN
+      content.setAttribute("aria-hidden", "false");
       this.setAttribute("aria-expanded", "true");
     }
   };
